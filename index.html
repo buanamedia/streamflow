@@ -5,93 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buana Media - Streamflow Portal</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            text-align: center;
-            max-width: 600px;
-            width: 100%;
-        }
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: #38bdf8;
-        }
-        p {
-            color: #94a3b8;
-            margin-bottom: 30px;
-        }
-        .server-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        @media (min-width: 480px) {
-            .server-grid {
-                flex-direction: row;
-            }
-        }
-        .card {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 25px;
-            flex: 1;
-            transition: transform 0.2s, border-color 0.2s;
-            text-decoration: none;
-            color: inherit;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: #38bdf8;
-        }
-        .card h2 {
-            font-size: 1.25rem;
-            margin-bottom: 8px;
-        }
-        .card p {
-            font-size: 0.875rem;
-            margin-bottom: 0;
-        }
-        .status {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            background-color: #22c55e;
-            border-radius: 50%;
-            margin-right: 6px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { text-align: center; max-width: 650px; width: 100%; }
+        .logo { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        p.subtitle { color: #94a3b8; margin-bottom: 35px; }
+        .server-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 520px) { .server-grid { grid-template-columns: 1fr 1fr; } }
+        .card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 30px 20px; text-decoration: none; color: inherit; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; }
+        .card:hover { transform: translateY(-8px); border-color: #38bdf8; background: rgba(30, 41, 59, 0.9); }
+        .card h2 { font-size: 1.3rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .card p { font-size: 0.875rem; color: #94a3b8; }
+        .status-dot { width: 10px; height: 10px; background-color: #22c55e; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #22c55e; }
+        .btn-access { margin-top: 18px; padding: 8px 16px; background: #38bdf8; color: #0f172a; font-weight: 600; border-radius: 8px; font-size: 0.85rem; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Streamflow Server Portal</h1>
-        <p>Pilih server STB untuk melanjutkan</p>
-        
+        <div class="logo">Streamflow Portal</div>
+        <p class="subtitle">Pilih server Streamflow yang ingin diakses</p>
         <div class="server-grid">
-            <!-- Server 1 -->
-            <a href="https://stb1.buanamedia.my.id" class="card">
-                <h2><span class="status"></span>Server 1 (STB 1)</h2>
-                <p>Klik untuk membuka Streamflow Utama</p>
+            <a href="https://server1.buanamedia.my.id" class="card" target="_blank">
+                <h2><span class="status-dot"></span> Server 1 (STB 1)</h2>
+                <p>Server 1 Streamflow</p>
+                <div class="btn-access">Buka Server 1</div>
             </a>
-
-            <!-- Server 2 -->
-            <a href="https://stb2.buanamedia.my.id" class="card">
-                <h2><span class="status"></span>Server 2 (STB 2)</h2>
-                <p>Klik untuk membuka Streamflow Cadangan</p>
+            <a href="https://server2.buanamedia.my.id" class="card" target="_blank">
+                <h2><span class="status-dot"></span> Server 2 (STB 2)</h2>
+                <p>Server 2 Streamflow</p>
+                <div class="btn-access">Buka Server 2</div>
             </a>
         </div>
     </div>
