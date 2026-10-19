@@ -29,7 +29,6 @@
             max-width: 650px; 
             width: 100%; 
         }
-        /* Style untuk Logo Streamflow Resmi */
         .brand-logo {
             width: 110px;
             height: auto;
@@ -71,6 +70,7 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
+            cursor: pointer;
         }
         .card:hover { 
             transform: translateY(-8px); 
@@ -88,6 +88,8 @@
             font-size: 0.875rem; 
             color: #94a3b8; 
         }
+        
+        /* Indikator Status Online (Hijau) */
         .status-dot { 
             width: 10px; 
             height: 10px; 
@@ -96,6 +98,13 @@
             display: inline-block; 
             box-shadow: 0 0 8px #22c55e; 
         }
+        
+        /* Indikator Status Offline (Merah) */
+        .status-dot.offline {
+            background-color: #ef4444;
+            box-shadow: 0 0 8px #ef4444;
+        }
+
         .btn-access { 
             margin-top: 18px; 
             padding: 8px 16px; 
@@ -104,6 +113,11 @@
             font-weight: 600; 
             border-radius: 8px; 
             font-size: 0.85rem; 
+        }
+
+        .btn-access.offline {
+            background: #475569;
+            color: #94a3b8;
         }
     </style>
 </head>
@@ -117,19 +131,49 @@
 
         <div class="server-grid">
             <!-- Server 1 -->
-            <a href="https://server1.buanamedia.my.id" class="card">
-                <h2><span class="status-dot"></span> Server 1</h2>
-                <p>Server 1 Streamflow</p>
-                <div class="btn-access">Buka Server 1</div>
+            <a id="link-s1" href="https://server1.buanamedia.my.id" class="card">
+                <h2><span id="dot-s1" class="status-dot"></span> Server 1</h2>
+                <p id="desc-s1">Pengecekan Server 1...</p>
+                <div id="btn-s1" class="btn-access">Buka Server 1</div>
             </a>
 
             <!-- Server 2 -->
-            <a href="https://server2.buanamedia.my.id" class="card">
-                <h2><span class="status-dot"></span> Server 2</h2>
-                <p>Server 2 Streamflow</p>
-                <div class="btn-access">Buka Server 2</div>
+            <a id="link-s2" href="https://server2.buanamedia.my.id" class="card">
+                <h2><span id="dot-s2" class="status-dot"></span> Server 2</h2>
+                <p id="desc-s2">Pengecekan Server 2...</p>
+                <div id="btn-s2" class="btn-access">Buka Server 2</div>
             </a>
         </div>
     </div>
+
+    <script>
+        // Fungsi Pengecekan Status Server
+        async function checkServerStatus(url, dotId, descId, btnId, linkId, serverName) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 4000); // Limit waktu check 4 detik
+
+                const response = await fetch(url, { method: 'HEAD', mode: 'no-cors', signal: controller.signal });
+                clearTimeout(timeoutId);
+                
+                // Server Online
+                document.getElementById(descId).innerText = "Server 1 Streamflow (Online)";
+                if(serverName === 'Server 2') document.getElementById(descId).innerText = "Server 2 Streamflow (Online)";
+            } catch (error) {
+                // Server Offline / Tunnel Error
+                document.getElementById(dotId).classList.add('offline');
+                document.getElementById(descId).innerText = "Server Sedang Maintenance";
+                document.getElementById(btnId).classList.add('offline');
+                document.getElementById(btnId).innerText = "Lihat Status";
+                
+                // Ubah link mengarah ke halaman maintenance.html
+                document.getElementById(linkId).href = `maintenance.html?server=${encodeURIComponent(serverName)}`;
+            }
+        }
+
+        // Jalankan Pengecekan Otomatis
+        checkServerStatus('https://server1.buanamedia.my.id', 'dot-s1', 'desc-s1', 'btn-s1', 'link-s1', 'Server 1');
+        checkServerStatus('https://server2.buanamedia.my.id', 'dot-s2', 'desc-s2', 'btn-s2', 'link-s2', 'Server 2');
+    </script>
 </body>
 </html>
