@@ -150,15 +150,15 @@
             const img = new Image();
             let isResolved = false;
 
-            // Timeout pengecekan 3 detik
+            // Timeout pengecekan 4 detik
             const timer = setTimeout(() => {
                 if (!isResolved) {
                     isResolved = true;
                     setOffline();
                 }
-            }, 3000);
+            }, 4000);
 
-            // Jika favicon server berhasil dimuat = Online
+            // Jika aset logo bawaan server berhasil dimuat = Server Online
             img.onload = () => {
                 if (!isResolved) {
                     isResolved = true;
@@ -167,7 +167,7 @@
                 }
             };
 
-            // Jika gagal dimuat (Error 1033 / Mati) = Offline
+            // Jika aset gagal dimuat / Cloudflare Tunnel mati = Server Offline
             img.onerror = () => {
                 if (!isResolved) {
                     isResolved = true;
@@ -176,8 +176,8 @@
                 }
             };
 
-            // Panggil favicon server secara langsung
-            img.src = `${domainUrl}/favicon.ico?v=${Math.random()}`;
+            // Memanggil aset gambar logo publik resmi dari aplikasi Streamflow
+            img.src = `${domainUrl}/images/logo.svg?v=${Math.random()}`;
 
             function setOffline() {
                 document.getElementById(dotId).classList.add('offline');
@@ -188,7 +188,7 @@
             }
         }
 
-        // Jalankan pengecekan
+        // Jalankan Pengecekan
         checkServer('https://server1.buanamedia.my.id', 'dot-s1', 'desc-s1', 'btn-s1', 'link-s1', 'Server 1');
         checkServer('https://server2.buanamedia.my.id', 'dot-s2', 'desc-s2', 'btn-s2', 'link-s2', 'Server 2');
     </script>
