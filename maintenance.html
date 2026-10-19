@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Maintenance - Buana Media</title>
+    
+    <!-- Favicon Streamflow Resmi -->
+    <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/bangtutorial/streamflow/main/public/images/logo.svg">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            max-width: 550px;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .brand-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.4));
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .status-dot-red {
+            width: 8px;
+            height: 8px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ef4444;
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            color: #f8fafc;
+        }
+        p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .server-info {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 10px;
+            padding: 12px;
+            font-family: monospace;
+            color: #38bdf8;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 12px 28px;
+            background: #38bdf8;
+            color: #0f172a;
+            font-weight: 700;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-back:hover {
+            background: #7dd3fc;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo Streamflow -->
+        <img src="https://raw.githubusercontent.com/bangtutorial/streamflow/main/public/images/logo.svg" alt="Streamflow Logo" class="brand-logo">
+        
+        <div class="status-badge">
+            <span class="status-dot-red"></span> Server Nonaktif / Maintenance
+        </div>
+
+        <h1>Server Sedang Pemeliharaan</h1>
+        <p>Mohon maaf, server STB yang Anda pilih saat ini sedang dalam perbaikan, mati listrik, atau terjadi gangguan koneksi Cloudflare Tunnel.</p>
+
+        <div class="server-info" id="server-name-display">
+            Target: Checking...
+        </div>
+
+        <a href="index.html" class="btn-back">&larr; Kembali ke Portal</a>
+    </div>
+
+    <script>
+        // Deteksi parameter nama server dari URL (misal: maintenance.html?server=Server%201)
+        const urlParams = new URLSearchParams(window.location.search);
+        const serverName = urlParams.get('server') || 'Server Streamflow';
+        document.getElementById('server-name-display').innerText = 'Target: ' + serverName;
+    </script>
+</body>
+</html>
