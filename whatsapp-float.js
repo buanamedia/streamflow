@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // KONFIGURASI (Sesuaikan data di bawah ini)
     // ==========================================
     const config = {
-        nomorWA: "6281414159500", // Gunakan format kode negara tanpa '+' atau spasi (contoh: 62812...)
+        nomorWA: "6281414159500", // Ganti dengan nomor WhatsApp Anda (format 62...)
+        teksTombol: "Pendaftaran Akun",
         judulPopup: "Halo yang disana!",
         subjudulPopup: "Silahkan klik dibawah ini untuk pendaftaran akun Streamflow dan tersambung ke WhatsApp :)",
         labelAdmin: "CS ADMIN",
@@ -12,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     // ==========================================
-    // 1. INJECT CSS STYLING (Posisi Kiri Bawah)
+    // 1. INJECT CSS STYLING (Tema Streamflow Portal)
     // ==========================================
     const style = document.createElement("style");
     style.textContent = `
@@ -21,46 +22,69 @@ document.addEventListener("DOMContentLoaded", function () {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* Tombol Floating di Kiri Bawah */
+        /* Tombol Floating Pill di Kiri Bawah */
         #sf-wa-btn {
             position: fixed;
             bottom: 24px;
             left: 24px;
-            width: 60px;
-            height: 60px;
-            background-color: #25D366;
-            border-radius: 50%;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+            height: 52px;
+            padding: 0 20px 0 8px;
+            background: linear-gradient(135deg, #1d263b 0%, #131929 100%);
+            border: 1px solid rgba(56, 152, 236, 0.45);
+            border-radius: 50px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 15px rgba(40, 148, 244, 0.15);
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 11px;
             cursor: pointer;
             z-index: 99999;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-            border: 3px solid #ffffff;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
         }
 
         #sf-wa-btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+            transform: translateY(-2px);
+            border-color: #3898ec;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 20px rgba(40, 148, 244, 0.35);
         }
 
-        #sf-wa-btn svg {
-            width: 34px;
-            height: 34px;
+        .sf-wa-icon-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38a1f3 0%, #1c75e8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(28, 117, 232, 0.4);
+        }
+
+        .sf-wa-icon-circle svg {
+            width: 21px;
+            height: 21px;
             fill: #ffffff;
+        }
+
+        .sf-wa-btn-text {
+            color: #f1f5f9;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
         }
 
         /* Kotak Pop-up (Muncul di atas tombol kiri) */
         #sf-wa-popup {
             position: fixed;
-            bottom: 98px;
+            bottom: 90px;
             left: 24px;
             width: 340px;
             max-width: calc(100vw - 48px);
-            background-color: #ffffff;
+            background-color: #161d2f;
+            border: 1px solid rgba(56, 152, 236, 0.25);
             border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
             overflow: hidden;
             z-index: 99999;
             opacity: 0;
@@ -76,19 +100,20 @@ document.addEventListener("DOMContentLoaded", function () {
             transform: translateY(0) scale(1);
         }
 
-        /* Bagian Header Hijau Pop-up */
+        /* Bagian Header Biru Gradasi Streamflow */
         .sf-wa-header {
-            background-color: #0b8a58;
+            background: linear-gradient(135deg, #2d9bf0 0%, #1967d2 100%);
             color: #ffffff;
             padding: 20px 22px;
             position: relative;
         }
 
         .sf-wa-header h4 {
-            margin: 0 24px 8px 0;
-            font-size: 19px;
+            margin: 0 24px 6px 0;
+            font-size: 18.5px;
             font-weight: 700;
-            line-height: 1.2;
+            line-height: 1.25;
+            color: #ffffff;
         }
 
         .sf-wa-header p {
@@ -100,27 +125,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
         .sf-wa-close {
             position: absolute;
-            top: 16px;
-            right: 16px;
-            background: transparent;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.15);
             border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
             color: #ffffff;
-            font-size: 22px;
+            font-size: 18px;
             line-height: 1;
             cursor: pointer;
-            padding: 4px;
-            opacity: 0.85;
-            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
         }
 
         .sf-wa-close:hover {
-            opacity: 1;
+            background: rgba(0, 0, 0, 0.3);
         }
 
-        /* Bagian Body Kartu CS Admin */
+        /* Bagian Body Kartu CS Admin (Dark Card seperti Server Card) */
         .sf-wa-body {
             padding: 18px;
-            background-color: #ffffff;
+            background-color: #161d2f;
         }
 
         .sf-wa-card {
@@ -128,25 +157,26 @@ document.addEventListener("DOMContentLoaded", function () {
             align-items: center;
             gap: 14px;
             padding: 14px 16px;
-            border: 1px solid #d5ebe1;
+            background-color: #1e273d;
+            border: 1px solid rgba(56, 152, 236, 0.25);
             border-radius: 10px;
             text-decoration: none;
-            background-color: #ffffff;
-            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+            transition: all 0.2s ease;
         }
 
         .sf-wa-card:hover {
-            background-color: #f4fbf8;
-            border-color: #0b8a58;
+            background-color: #24304a;
+            border-color: #3898ec;
             transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(40, 148, 244, 0.15);
         }
 
         .sf-wa-avatar {
             width: 46px;
             height: 46px;
             border-radius: 50%;
-            background-color: #dcfce7;
-            border: 1.5px solid #86efac;
+            background-color: rgba(45, 155, 240, 0.15);
+            border: 1.5px solid rgba(56, 152, 236, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -154,9 +184,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         .sf-wa-avatar svg {
-            width: 24px;
-            height: 24px;
-            stroke: #0b8a58;
+            width: 23px;
+            height: 23px;
+            stroke: #38a1f3;
             fill: none;
             stroke-width: 2;
         }
@@ -169,8 +199,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .sf-wa-role {
             font-size: 11px;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            color: #9ca3af;
+            letter-spacing: 0.6px;
+            color: #60a5fa;
             text-transform: uppercase;
             margin-bottom: 3px;
         }
@@ -178,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .sf-wa-name {
             font-size: 15.5px;
             font-weight: 700;
-            color: #1f2937;
+            color: #f8fafc;
         }
     `;
     document.head.appendChild(style);
@@ -215,11 +245,14 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         </div>
 
-        <!-- Floating Button -->
-        <div id="sf-wa-btn" role="button" tabindex="0" aria-label="Chat WhatsApp">
-            <svg viewBox="0 0 448 512">
-                <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
-            </svg>
+        <!-- Floating Button dengan Tulisan Pendaftaran Akun -->
+        <div id="sf-wa-btn" role="button" tabindex="0" aria-label="Pendaftaran Akun via WhatsApp">
+            <div class="sf-wa-icon-circle">
+                <svg viewBox="0 0 448 512">
+                    <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+                </svg>
+            </div>
+            <span class="sf-wa-btn-text">${config.teksTombol}</span>
         </div>
     `;
     document.body.appendChild(widgetContainer);
@@ -253,7 +286,6 @@ document.addEventListener("DOMContentLoaded", function () {
         waPopup.setAttribute("aria-hidden", "true");
     });
 
-    // Tutup pop-up otomatis jika user mengklik area di luar kotak
     document.addEventListener("click", function (e) {
         if (!widgetContainer.contains(e.target)) {
             waPopup.classList.remove("sf-show");
